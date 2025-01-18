@@ -1,0 +1,9 @@
+name: Create/Update Prerequisite Azure resources
+on: workflow_dispatch
+jobs:
+  test_run:
+    name: "test run"
+    runs-on: "ububtu-latest"
+    steps:
+      - name: "test step"
+        run: echo "Hello world"
