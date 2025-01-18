@@ -3,7 +3,7 @@ on: workflow_dispatch
 jobs:
   test_run:
     name: "test run"
-    runs-on: "ububtu-latest"
+    runs-on: "ubuntu-latest"
     steps:
       - name: "test step"
         run: echo "Hello world"
