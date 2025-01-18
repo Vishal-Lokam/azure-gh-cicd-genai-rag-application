@@ -1,9 +1,68 @@
 name: Create/Update Prerequisite Azure resources
 on: workflow_dispatch
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 jobs:
-  test_run:
-    name: "test run"
+  terraform_plan:
+    name: "Terraform Plan"
     runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./prerequisites
+
     steps:
-      - name: "test step"
-        run: echo "Hello world"
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -var="subscription_id=${{ secrets. AZURE_SUBSCRIPTION_ID }}" -out=main.tfplan && terraform show tfplan
+
+      - name: Publish Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: ./prerequisites/main.tfplan
+
+  terraform_apply:
+    needs: terraform_plan
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./cluster-deployment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: ./prerequisites
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve "./main.tfplan"
