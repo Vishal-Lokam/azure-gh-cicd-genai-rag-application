@@ -45,7 +45,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./cluster-deployment
+        working-directory: ./prerequisites
 
     steps:
       - name: Checkout code
