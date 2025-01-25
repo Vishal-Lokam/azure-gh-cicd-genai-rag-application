@@ -1,10 +1,21 @@
 name: Create/Update Prerequisite Azure resources
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_USE_AZUREAD: true
 jobs:
   terraform_plan:
     name: "Terraform Plan"
@@ -30,7 +41,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: pwd && ls -lrt && terraform plan -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -var="client_secret=${{ secrets.ARM_CLIENT_SECRET }}" -out=main.tfplan && terraform show main.tfplan
+        run: pwd && ls -lrt && terraform plan -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" -var="client_id=${{ secrets.ARM_CLIENT_ID }}" -var="tenant_id=${{ secrets.ARM_TENANT_ID }}" -out=main.tfplan && terraform show main.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
