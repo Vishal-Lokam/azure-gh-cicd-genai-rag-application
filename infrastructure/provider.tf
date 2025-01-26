@@ -5,11 +5,15 @@ terraform {
       version = ">=4.16.0"
     }
   }
+  backend "azurerm" {
+    key      = "terraform.tfstate"
+    use_oidc = true
+  }
 
 }
 
 provider "azurerm" {
-  subscription_id = var.subscription_id
+  use_oidc = true
   features {
 
   }
