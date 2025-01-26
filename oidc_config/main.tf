@@ -18,6 +18,14 @@ resource "azurerm_storage_container" "astralbound-tf-state" {
   container_access_type = "private"
 }
 
+resource "azurerm_role_assignment" "astralbound-tf-state-blob-contributor" {
+  scope                            = azurerm_storage_container.astralbound-tf-state.resource_manager_id
+  role_definition_name             = "Storage Blob Data Contributor"
+  principal_id                     = azuread_service_principal.github_oidc_sp.object_id
+  skip_service_principal_aad_check = true
+  principal_type                   = "ServicePrincipal"
+}
+
 data "azurerm_client_config" "current" {
 
 }
