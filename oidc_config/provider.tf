@@ -8,22 +8,23 @@ terraform {
       source  = "hashicorp/azuread"
       version = ">=3.1.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = ">=6.5.0"
+    }
   }
 }
 
 provider "azurerm" {
   features {
-    key_vault {
-      purge_soft_delete_on_destroy = true
-    }
   }
-
-  # subscription_id = var.subscription_id
-  # client_id       = var.client_id
-  # tenant_id       = var.tenant_id
-  use_oidc = true
+  subscription_id = var.subscription_id
 }
 
 provider "azuread" {
 }
 
+provider "github" {
+  token = var.github_token
+  owner = var.organisation_name
+}

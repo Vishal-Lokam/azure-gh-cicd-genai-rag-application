@@ -3,17 +3,18 @@ variable "subscription_id" {
   type        = string
 }
 
-variable "client_id" {
-  description = "Service Principal client id"
-  type        = string
-}
+# variable "client_id" {
+#   description = "Tenant id of the azure subscription"
+#   type        = string
+# }
 
-variable "tenant_id" {
-  description = "Service Principal tenant_id"
-  type        = string
-}
+# variable "tenant_id" {
+#   description = "Tenant id of the azure subscription"
+#   type        = string
+# }
 
-variable "client_secret" {
-  description = "Service Principal client_secret"
-  type        = string
-}
+# variable "client_secret" {
+#   description = "Tenant id of the azure subscription"
+#   type        = string
+# }
+
