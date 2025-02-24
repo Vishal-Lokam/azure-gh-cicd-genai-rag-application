@@ -1,0 +1,6 @@
+{
+    "resource_group_name": "infrastructure_rg",
+    "subscription_id": "f3a0be4d-7a41-4def-9e34-ccfeb5a710a0",
+    "keyvault_name": "astralbound-key-vault",
+    "location": "westindia"
+}
