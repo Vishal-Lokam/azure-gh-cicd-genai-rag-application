@@ -54,8 +54,4 @@ variable "backend_storge_container_name" {
   type        = string
 }
 
-variable "keyvault_name" {
-  description = "Key valut name"
-  type        = string
-}
 
