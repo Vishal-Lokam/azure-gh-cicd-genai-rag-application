@@ -1,3 +1,7 @@
+data "azurerm_client_config" "current" {
+
+}
+
 resource "github_actions_secret" "client_id_secret" {
   repository      = var.repository_name
   secret_name     = "AZURE_CLIENT_ID"
