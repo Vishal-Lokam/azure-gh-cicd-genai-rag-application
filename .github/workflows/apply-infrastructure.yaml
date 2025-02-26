@@ -34,7 +34,8 @@ jobs:
         run: |
           cd ./environment 
           ls
-          jq '.resource_group_name' platform.json
+          export RESOURCE_GROUP_NAME = jq '.resource_group_name' platform.json
+          echo $RESOURCE_GROUP_NAME
 
   # terraform_plan:
   #   name: "Terraform Plan"
