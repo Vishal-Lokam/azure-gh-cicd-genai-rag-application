@@ -33,7 +33,7 @@ jobs:
       - name: Access value
         run: |
           cd ./environment 
-          jq '.resource_group_name' platform.json | echo
+          var=$(jq '.resource_group_name' platform.json)
 
   # terraform_plan:
   #   name: "Terraform Plan"
