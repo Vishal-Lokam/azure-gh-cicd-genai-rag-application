@@ -16,80 +16,101 @@ env:
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_USE_AZUREAD: true
 jobs:
-  terraform_plan:
-    name: "Terraform Plan"
+  Test_jq:
+    name: "test_jq"
     runs-on: "ubuntu-latest"
     defaults:
       run:
         shell: bash
-        working-directory: ./infrastructure
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Check JQ
+        run: jq --version
 
-      - name: Terraform fmt
-        run: terraform fmt -check
-
-      - name: Terraform Init
+      - name: Access value
         run: |
-          terraform init \
-          -backend-config="resource_group_name=${{secrets.BACKEND_RESOURCE_GROUP_NAME}}" \
-          -backend-config="storage_account_name=${{secrets.BACKEND_STORAGE_ACCOUNT_NAME}}" \
-          -backend-config="container_name=${{secrets.BACKEND_STORAGE_ACCOUNT_CONTAINER_NAME}}"
+          cd ./environment 
+          ls
+          export RESOURCE_GROUP_NAME = $( echo jq '.resource_group_name' platform.json)
+          echo $RESOURCE_GROUP_NAME
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
+  # terraform_plan:
+  #   name: "Terraform Plan"
+  #   runs-on: "ubuntu-latest"
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: ./infrastructure
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=main.tfplan && terraform show main.tfplan
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v4
 
-      - name: Publish Terraform Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: ./infrastructure/main.tfplan
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v3
 
-  terraform_apply:
-    needs: terraform_plan
-    name: Terraform Apply
-    runs-on: ubuntu-latest
-    env:
-      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-      ARM_USE_AZUREAD: true # This environment variable tells the backend to use AzureAD auth rather than trying a create a key. It means we can limit the permissions applied to the storage account and container to least priviledge: https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#use_azuread_auth
+  #     - name: Terraform fmt
+  #       run: terraform fmt -check
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./infrastructure
+  #     - name: Terraform Init
+  #       run: |
+  #         terraform init \
+  #         -backend-config="resource_group_name=${{secrets.BACKEND_RESOURCE_GROUP_NAME}}" \
+  #         -backend-config="storage_account_name=${{secrets.BACKEND_STORAGE_ACCOUNT_NAME}}" \
+  #         -backend-config="container_name=${{secrets.BACKEND_STORAGE_ACCOUNT_CONTAINER_NAME}}"
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #     - name: Terraform Validate
+  #       id: validate
+  #       run: terraform validate
 
-      - name: Setup terraform
-        uses: hashicorp/setup-terraform@v3
+  #     - name: Terraform Plan
+  #       id: plan
+  #       run: terraform plan -var="subscription_id=${{secrets.AZURE_SUBSCRIPTION_ID}}" -out=main.tfplan && terraform show main.tfplan
 
-      - name: Terraform Init
-        id: init
-        run: |
-          terraform init \
-          -backend-config="resource_group_name=${{secrets.BACKEND_RESOURCE_GROUP_NAME}}" \
-          -backend-config="storage_account_name=${{secrets.BACKEND_STORAGE_ACCOUNT_NAME}}" \
-          -backend-config="container_name=${{secrets.BACKEND_STORAGE_ACCOUNT_CONTAINER_NAME}}"
+  #     - name: Publish Terraform Plan
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: tfplan
+  #         path: ./infrastructure/main.tfplan
 
-      - name: Download Terraform Plan
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ./infrastructure
+  # terraform_apply:
+  #   needs: terraform_plan
+  #   name: Terraform Apply
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  #     ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  #     ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+  #     ARM_USE_AZUREAD: true # This environment variable tells the backend to use AzureAD auth rather than trying a create a key. It means we can limit the permissions applied to the storage account and container to least priviledge: https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#use_azuread_auth
 
-      - name: Terraform apply
-        run: terraform apply -auto-approve "./main.tfplan"
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: ./infrastructure
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup terraform
+  #       uses: hashicorp/setup-terraform@v3
+
+  #     - name: Terraform Init
+  #       id: init
+  #       run: |
+  #         terraform init \
+  #         -backend-config="resource_group_name=${{secrets.BACKEND_RESOURCE_GROUP_NAME}}" \
+  #         -backend-config="storage_account_name=${{secrets.BACKEND_STORAGE_ACCOUNT_NAME}}" \
+  #         -backend-config="container_name=${{secrets.BACKEND_STORAGE_ACCOUNT_CONTAINER_NAME}}"
+
+  #     - name: Download Terraform Plan
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: tfplan
+  #         path: ./infrastructure
+
+  #     - name: Terraform apply
+  #       run: terraform apply -auto-approve "./main.tfplan"
