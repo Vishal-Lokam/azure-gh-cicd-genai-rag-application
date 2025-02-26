@@ -1,6 +1,6 @@
 
 resource "azurerm_resource_group" "infrastructure_rg" {
-  name     = "infrastructure_rg"
+  name     = var.resource_group_name
   location = "westindia"
 }
 
@@ -50,4 +50,3 @@ resource "azurerm_key_vault_secret" "azure-subscription-id" {
   value        = var.subscription_id
   key_vault_id = azurerm_key_vault.astralbound-key-vault.id
 }
-

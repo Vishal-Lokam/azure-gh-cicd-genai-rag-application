@@ -12,3 +12,8 @@ variable "location" {
   description = "Location for prerequisite resources"
   type        = string
 }
+
+variable "resource_group_name" {
+  description = "Resource group for the infrastructure"
+  type        = string
+}
