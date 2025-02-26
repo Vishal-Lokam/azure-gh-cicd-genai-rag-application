@@ -25,6 +25,9 @@ jobs:
         working-directory: ./environment
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Check JQ
         run: jq --version
   # terraform_plan:
