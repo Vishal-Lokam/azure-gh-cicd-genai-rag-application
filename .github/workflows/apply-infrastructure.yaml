@@ -48,9 +48,13 @@ jobs:
         run: |
           cd ../environment 
           SUBSCRIPTION_ID=$(jq '.subscription_id' platform.json | tr -d \")
+          echo "$SUBSCRIPTION_ID"
           KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
+          echo "$KEYVAULT_NAME"
           LOCATION=$(jq '.location' platform.json | tr -d \")
+          echo "$LOCATION"
           RESOURCE_GROUP_NAME=$(jq '.resource_group_name' platform.json | tr -d \")
+          echo "$RESOURCE_GROUP_NAME"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
