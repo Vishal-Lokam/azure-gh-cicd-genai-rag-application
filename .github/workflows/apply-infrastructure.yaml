@@ -22,7 +22,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./environment
 
     steps:
       - name: Checkout repo
@@ -30,6 +29,12 @@ jobs:
 
       - name: Check JQ
         run: jq --version
+
+      - name: Access value
+        run: |
+          cd evironment
+          jq '.platform' platform.json
+
   # terraform_plan:
   #   name: "Terraform Plan"
   #   runs-on: "ubuntu-latest"
