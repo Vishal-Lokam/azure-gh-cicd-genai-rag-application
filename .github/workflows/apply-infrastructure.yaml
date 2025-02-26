@@ -32,7 +32,7 @@ jobs:
 
       - name: Access value
         run: |
-          cd environment \
+          cd ./environment 
           ls
 
       # jq '.platform' platform.json
