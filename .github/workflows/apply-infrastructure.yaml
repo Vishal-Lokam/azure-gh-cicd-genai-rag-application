@@ -32,8 +32,9 @@ jobs:
 
       - name: Access value
         run: |
-          cd evironment
-          jq '.platform' platform.json
+          ls
+
+      # jq '.platform' platform.json
 
   # terraform_plan:
   #   name: "Terraform Plan"
