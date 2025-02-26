@@ -47,8 +47,6 @@ jobs:
       - name: Set environment variables
         run: |
           cd ../environment 
-          SUBSCRIPTION_ID=$(jq '.subscription_id' platform.json | tr -d \")
-          echo "$SUBSCRIPTION_ID"
           KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
           echo "$KEYVAULT_NAME"
           LOCATION=$(jq '.location' platform.json | tr -d \")
@@ -77,10 +75,10 @@ jobs:
         id: plan
         run: |
           terraform plan \
-            -var="subscription_id=$SUBSCRIPTION_ID" \
-            -var="keyvault_name=KEYVAULT_NAME" \
-            -var="location=LOCATION" \
-            -var="resource_group_name=RESOURCE_GROUP_NAME" \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="keyvault_name=$KEYVAULT_NAME" \
+            -var="location=$LOCATION" \
+            -var="resource_group_name=$RESOURCE_GROUP_NAME" \
             -out=main.tfplan \
           && terraform show main.tfplan
 
