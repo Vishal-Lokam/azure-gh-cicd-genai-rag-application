@@ -33,9 +33,7 @@ jobs:
       - name: Access value
         run: |
           cd ./environment 
-          ls
-          export RESOURCE_GROUP_NAME = $( echo jq '.resource_group_name' platform.json)
-          echo $RESOURCE_GROUP_NAME
+          jq '.resource_group_name' platform.json | echo
 
   # terraform_plan:
   #   name: "Terraform Plan"
