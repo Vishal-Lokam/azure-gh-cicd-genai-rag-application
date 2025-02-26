@@ -19,10 +19,6 @@ jobs:
   Test_jq:
     name: "test_jq"
     runs-on: "ubuntu-latest"
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
