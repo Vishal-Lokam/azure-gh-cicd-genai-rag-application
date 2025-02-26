@@ -34,8 +34,7 @@ jobs:
         run: |
           cd ./environment 
           ls
-
-      # jq '.platform' platform.json
+          jq '.platform' platform.json
 
   # terraform_plan:
   #   name: "Terraform Plan"
