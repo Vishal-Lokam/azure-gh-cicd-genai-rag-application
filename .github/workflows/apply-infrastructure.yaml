@@ -73,13 +73,13 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: |
+        run: >-
           terraform plan \
-            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
-            -var="keyvault_name=$KEYVAULT_NAME" \
-            -var="location=$LOCATION" \
-            -var="resource_group_name=$RESOURCE_GROUP_NAME" \
-            -out=main.tfplan \
+          -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+          -var="keyvault_name=$KEYVAULT_NAME" \
+          -var="location=$LOCATION" \
+          -var="resource_group_name=$RESOURCE_GROUP_NAME" \
+          -out=main.tfplan \
           && terraform show main.tfplan
 
       - name: Publish Terraform Plan
