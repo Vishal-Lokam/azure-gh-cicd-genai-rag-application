@@ -46,7 +46,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          cd ./environment 
+          cd ../environment 
           SUBSCRIPTION_ID=$(jq '.subscription_id' platform.json | tr -d \")
           KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
           LOCATION=$(jq '.location' platform.json | tr -d \")
