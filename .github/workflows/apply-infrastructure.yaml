@@ -34,6 +34,7 @@ jobs:
         run: |
           cd ./environment 
           var=$(jq '.resource_group_name' platform.json)
+          echo $var
 
   # terraform_plan:
   #   name: "Terraform Plan"
