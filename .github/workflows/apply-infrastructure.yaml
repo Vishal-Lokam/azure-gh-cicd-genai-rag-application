@@ -79,8 +79,7 @@ jobs:
           -var="keyvault_name=$KEYVAULT_NAME" \
           -var="location=$LOCATION" \
           -var="resource_group_name=$RESOURCE_GROUP_NAME" \
-          -out=main.tfplan \
-          && terraform show main.tfplan
+          -out=main.tfplan && terraform show main.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
