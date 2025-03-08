@@ -1,29 +1,19 @@
-name: Create infrastructure
+name: Destroy infrastructure
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 permissions:
   id-token: write
   contents: read
 env:
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_USE_AZUREAD: true
 jobs:
   terraform_plan:
-    name: "Terraform Plan"
-    runs-on: "ubuntu-latest"
+    name: Terraform Plan
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
         working-directory: ./infrastructure
-
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -38,27 +28,23 @@ jobs:
           export RESOURCE_GROUP_NAME=$(jq '.resource_group_name' platform.json | tr -d \")
           echo "$RESOURCE_GROUP_NAME"
 
-      - name: Setup Terraform
+      - name: Setup Terrform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform fmt
         run: terraform fmt -check
 
-      - name: Terraform Init
+      - name: Terrafor Init
         run: |
           terraform init \
           -backend-config="resource_group_name=${{secrets.BACKEND_RESOURCE_GROUP_NAME}}" \
           -backend-config="storage_account_name=${{secrets.BACKEND_STORAGE_ACCOUNT_NAME}}" \
           -backend-config="container_name=${{secrets.BACKEND_STORAGE_ACCOUNT_CONTAINER_NAME}}"
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-
-      - name: Terraform Plan
+      - name: Terraform plan
         id: plan
         run: |
-          terraform plan -var-file="../environment/dev.tfvars.json" -var="subscription_id=${{secrets.AZURE_SUBSCRIPTION_ID}}" -out=main.tfplan && terraform show main.tfplan
+          terraform plan -destroy -var-file="../environment/dev.tfvars.json" -var="subscription_id=${{secrets.AZURE_SUBSCRIPTION_ID}}" -out=main.tfplan && terraform show main.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
@@ -66,21 +52,16 @@ jobs:
           name: tfplan
           path: ./infrastructure/main.tfplan
 
-  terraform_apply:
+  terraform_destroy:
     needs: terraform_plan
-    name: Terraform Apply
+    name: Terraform Destroy
     runs-on: ubuntu-latest
     env:
-      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-      ARM_USE_AZUREAD: true # This environment variable tells the backend to use AzureAD auth rather than trying a create a key. It means we can limit the permissions applied to the storage account and container to least priviledge: https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#use_azuread_auth
-
+      ARM_USE_AZUREAD: true
     defaults:
       run:
         shell: bash
         working-directory: ./infrastructure
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -103,4 +84,4 @@ jobs:
           path: ./infrastructure
 
       - name: Terraform apply
-        run: terraform apply -auto-approve "./main.tfplan"
+        run: terraform apply -destroy -auto-approve "./main.tfplan"
