@@ -22,12 +22,3 @@ resource "azuread_application_federated_identity_credential" "github_oidc_creds-
   audiences      = ["${var.default_audience_name}"]
   subject        = "repo:${var.organisation_name}/${var.repository_name}:ref:refs/heads/main"
 }
-
-resource "azuread_application_federated_identity_credential" "github_oidc_creds-pr" {
-  application_id = azuread_application.github_oidc.id
-  display_name   = "${var.organisation_name}-${var.repository_name}-pr"
-  issuer         = var.github_issuer
-  audiences      = ["${var.default_audience_name}"]
-  subject        = "repo:${var.organisation_name}/${var.repository_name}:pull_request"
-}
-
