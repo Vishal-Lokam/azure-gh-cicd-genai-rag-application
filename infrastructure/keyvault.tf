@@ -31,7 +31,7 @@ resource "azurerm_key_vault" "astralbound-key-vault" {
       "Set"
     ]
   }
-
+  tags = local.tags
 }
 
 
@@ -39,4 +39,5 @@ resource "azurerm_key_vault_secret" "azure-subscription-id" {
   name         = "subscription-id"
   value        = var.subscription_id
   key_vault_id = azurerm_key_vault.astralbound-key-vault.id
+  tags         = local.tags
 }
