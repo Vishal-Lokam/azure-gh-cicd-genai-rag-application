@@ -10,7 +10,7 @@ resource "azurerm_cognitive_account" "azure_openai_account" {
 
 # TODO: Add Azure OpenAI deployment here
 resource "azurerm_cognitive_deployment" "astral_gpt_41_nano" {
-  for_each             = var.azure_openai_deployment
+  for_each             = { for index, deployment in var.azure_openai_deployment : deployment.deployment_name => deployment }
   name                 = each.value.deployment_name
   cognitive_account_id = azurerm_cognitive_account.azure_openai_account.id
 
