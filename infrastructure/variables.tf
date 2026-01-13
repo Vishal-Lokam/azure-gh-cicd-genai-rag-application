@@ -29,7 +29,7 @@ variable "azure_openai_deployment" {
     deployment_name = string
     model_name      = string
     model_format    = string
-    model_version   = Optional(string)
+    model_version   = optional(string)
     sku             = string
     capacity        = number
   }))
