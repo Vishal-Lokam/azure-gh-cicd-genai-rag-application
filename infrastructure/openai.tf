@@ -8,7 +8,6 @@ resource "azurerm_cognitive_account" "azure_openai_account" {
   tags = local.tags
 }
 
-# TODO: Add Azure OpenAI deployment here
 resource "azurerm_cognitive_deployment" "astral_gpt_41_nano" {
   for_each             = { for index, deployment in var.azure_openai_deployment : deployment.deployment_name => deployment }
   name                 = each.value.deployment_name
@@ -25,18 +24,3 @@ resource "azurerm_cognitive_deployment" "astral_gpt_41_nano" {
   }
 }
 
-# resource "azurerm_cognitive_deployment" "astral_text_embedding_large_3" {
-#   name                 = "text-embedding-3-large"
-#   cognitive_account_id = azurerm_cognitive_account.azure_openai_account.id
-
-#   model {
-#     format  = "OpenAI"
-#     name    = "text-embedding-3-large"
-#     version = 1
-#   }
-
-#   sku {
-#     name     = "Standard"
-#     capacity = 10
-#   }
-# }
