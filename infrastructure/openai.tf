@@ -10,33 +10,33 @@ resource "azurerm_cognitive_account" "azure_openai_account" {
 
 # TODO: Add Azure OpenAI deployment here
 resource "azurerm_cognitive_deployment" "astral_gpt_41_nano" {
-  name                 = "gpt-4.1-nano"
+  for_each             = var.azure_openai_deployment
+  name                 = each.value.deployment_name
   cognitive_account_id = azurerm_cognitive_account.azure_openai_account.id
 
   model {
-    format  = "OpenAI"
-    name    = "gpt-4.1-nano"
-    version = "2025-04-14"
+    format = each.value.model_format
+    name   = each.value.model_name
   }
 
   sku {
-    name     = "GlobalStandard"
-    capacity = 10
+    name     = each.value.sku
+    capacity = each.value.capacity
   }
 }
 
-resource "azurerm_cognitive_deployment" "astral_text_embedding_large_3" {
-  name                 = "text-embedding-3-large"
-  cognitive_account_id = azurerm_cognitive_account.azure_openai_account.id
+# resource "azurerm_cognitive_deployment" "astral_text_embedding_large_3" {
+#   name                 = "text-embedding-3-large"
+#   cognitive_account_id = azurerm_cognitive_account.azure_openai_account.id
 
-  model {
-    format  = "OpenAI"
-    name    = "text-embedding-3-large"
-    version = 1
-  }
+#   model {
+#     format  = "OpenAI"
+#     name    = "text-embedding-3-large"
+#     version = 1
+#   }
 
-  sku {
-    name     = "Standard"
-    capacity = 10
-  }
-}
+#   sku {
+#     name     = "Standard"
+#     capacity = 10
+#   }
+# }
