@@ -9,6 +9,12 @@ resource "azuread_service_principal" "github_oidc_sp" {
   client_id = azuread_application.github_oidc.client_id
 }
 
+resource "azuread_service_principal_password" "sp_client_secret" {
+  service_principal_id = azuread_service_principal.github_oidc_sp.id
+  display_name         = "dev_client_secret"
+  end_date             = "2026-12-01T01:02:03Z"
+}
+
 resource "azurerm_role_assignment" "github_oidc_role_assignment" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "Contributor"
@@ -22,3 +28,5 @@ resource "azuread_application_federated_identity_credential" "github_oidc_creds-
   audiences      = ["${var.default_audience_name}"]
   subject        = "repo:${var.organisation_name}/${var.repository_name}:ref:refs/heads/main"
 }
+
+

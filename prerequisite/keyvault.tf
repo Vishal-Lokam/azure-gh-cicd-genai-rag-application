@@ -45,3 +45,10 @@ resource "azurerm_key_vault_secret" "postgres-admin-password" {
   value        = var.postgres_admin_password
   key_vault_id = azurerm_key_vault.astralbound-key-vault.id
 }
+
+
+resource "azurerm_role_assignment" "keyvault_role_assignment" {
+  scope                = azurerm_key_vault.astralbound-key-vault.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azuread_service_principal.github_oidc_sp.object_id
+}
