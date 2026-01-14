@@ -3,10 +3,6 @@ variable "subscription_id" {
   type        = string
 }
 
-variable "keyvault_name" {
-  description = "Key valut name"
-  type        = string
-}
 
 variable "location" {
   description = "Location for prerequisite resources"
@@ -33,4 +29,9 @@ variable "azure_openai_deployment" {
     sku             = string
     capacity        = number
   }))
+}
+
+variable "postgres_admin_login" {
+  description = "administrator login for Azure Postgres flexible server"
+  type        = string
 }
