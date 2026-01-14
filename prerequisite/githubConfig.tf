@@ -8,12 +8,6 @@ resource "github_actions_secret" "client_id_secret" {
   plaintext_value = azuread_application.github_oidc.client_id
 }
 
-resource "github_actions_secret" "sp_client_secret" {
-  repository      = var.repository_name
-  secret_name     = "AZURE_CLIENT_SECRET"
-  plaintext_value = azuread_service_principal_password.sp_client_secret.value
-}
-
 resource "github_actions_secret" "subscription_id_secret" {
   repository      = var.repository_name
   secret_name     = "AZURE_SUBSCRIPTION_ID"
