@@ -20,6 +20,7 @@ resource "azurerm_postgresql_flexible_server" "astralbound_postgres" {
   administrator_password        = data.azurerm_key_vault_secret.postgres_admin_password.value
   storage_mb                    = "32768"
   sku_name                      = "B_Standard_B1ms"
+  zone                          = "1"
 
   tags = local.tags
 }
