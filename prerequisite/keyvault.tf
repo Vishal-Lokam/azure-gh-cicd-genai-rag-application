@@ -1,6 +1,6 @@
-resource "azurerm_key_vault" "astralbound-key-vault" {
+resource "azurerm_key_vault" "astralbound_key_vault" {
   name                       = var.keyvault_name
-  resource_group_name        = azurerm_resource_group.astralbound-prerequisites.name
+  resource_group_name        = azurerm_resource_group.astralbound_prerequisites.name
   location                   = var.location
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = "standard"
@@ -31,24 +31,26 @@ resource "azurerm_key_vault" "astralbound-key-vault" {
       "Set"
     ]
   }
+
+  # TODO: Add access policy for local identity(oid identity is already added)
 }
 
 
-resource "azurerm_key_vault_secret" "azure-subscription-id" {
+resource "azurerm_key_vault_secret" "azure_subscription_id" {
   name         = "subscription-id"
   value        = var.subscription_id
-  key_vault_id = azurerm_key_vault.astralbound-key-vault.id
+  key_vault_id = azurerm_key_vault.astralbound_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "postgres-admin-password" {
+resource "azurerm_key_vault_secret" "postgres_admin_password" {
   name         = "postgres-administrator-password"
   value        = var.postgres_admin_password
-  key_vault_id = azurerm_key_vault.astralbound-key-vault.id
+  key_vault_id = azurerm_key_vault.astralbound_key_vault.id
 }
 
 
 resource "azurerm_role_assignment" "keyvault_role_assignment" {
-  scope                = azurerm_key_vault.astralbound-key-vault.id
+  scope                = azurerm_key_vault.astralbound_key_vault.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azuread_service_principal.github_oidc_sp.object_id
 }
