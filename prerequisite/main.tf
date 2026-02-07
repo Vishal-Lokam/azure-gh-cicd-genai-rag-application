@@ -1,4 +1,15 @@
 #This repository is for creating resources that should be already present for the project to work
+data "azurerm_client_config" "current" {
+
+}
+
+resource "azuread_group" "admin_entraid_group" {
+  display_name     = "Admin_Astralbound"
+  owners           = [data.azurerm_client_config.current.object_id]
+  members          = [data.azurerm_client_config.current.object_id]
+  security_enabled = true
+}
+
 resource "azurerm_resource_group" "astralbound_prerequisites" {
   name     = var.resource_group_name
   location = var.location
@@ -19,7 +30,7 @@ resource "azurerm_storage_container" "astralbound_tf_state" {
 }
 
 resource "azurerm_role_assignment" "astralbound_tf_state_blob_contributor" {
-  scope                            = azurerm_storage_container.astralbound_tf_state.resource_manager_id
+  scope                            = azurerm_storage_container.astralbound_tf_state.id
   role_definition_name             = "Storage Blob Data Contributor"
   principal_id                     = azuread_service_principal.github_oidc_sp.object_id
   skip_service_principal_aad_check = true
