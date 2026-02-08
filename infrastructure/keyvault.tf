@@ -38,6 +38,6 @@ data "azuread_service_principal" "service_principal" {
 
 resource "azurerm_role_assignment" "keyvault_role_assignment" {
   scope                = azurerm_key_vault.astralbound-key-vault.id
-  role_definition_name = "Key Vault Secrets User"
+  role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azuread_service_principal.service_principal.object_id
 }
