@@ -32,7 +32,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "test"
+          echo "YOu can set env. variables here"
 
       - name: Azure Login
         uses: azure/login@v2
