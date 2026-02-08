@@ -41,7 +41,7 @@ variable "key_vault_name" {
   type        = string
 }
 
-variable "user_object_id" {
-  description = "User's object id so you can manage the access from the portal"
-  type        = string
-}
+# variable "user_object_id" {
+#   description = "User's object id so you can manage the access from the portal"
+#   type        = string
+# }
