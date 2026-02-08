@@ -11,10 +11,6 @@ permissions:
   id-token: write
   contents: read
 env:
-  # Try removing these env. variables for better az login clarity
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_USE_AZUREAD: true
 jobs:
   terraform_plan:
@@ -29,6 +25,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      # TODO: Remove this step
       - name: Set environment variables
         run: |
           cd ../environment
@@ -66,7 +63,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          terraform plan -var-file="../environment/dev.tfvars.json" -var="subscription_id=${{secrets.AZURE_SUBSCRIPTION_ID}}" -out=main.tfplan && terraform show main.tfplan
+          terraform plan -var-file="../environment/dev.tfvars.json" -out=main.tfplan && terraform show main.tfplan
 
       - name: Publish Terraform Plan
         uses: actions/upload-artifact@v4
