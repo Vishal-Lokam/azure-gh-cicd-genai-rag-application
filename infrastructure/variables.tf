@@ -40,3 +40,8 @@ variable "key_vault_name" {
   description = "Name of the key vault"
   type        = string
 }
+
+variable "user_object_id" {
+  description = "User's object id so you can manage the access from the portal"
+  type        = string
+}
