@@ -7,9 +7,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      skip_terraform_apply:
-        type: boolean
 
 permissions:
   id-token: write
@@ -35,9 +32,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo ${{ inputs.skip_terraform_apply }}
-          echo "SKIP_TERRAFORM_APPLY=${{ inputs.skip_terraform_apply || false }}" >> $GITHUB_ENV
-          echo "${{ vars.SKIP_TERRAFORM_APPLY }}"
+          echo "test"
 
       - name: Azure Login
         uses: azure/login@v2
@@ -75,7 +70,6 @@ jobs:
           path: ./infrastructure/main.tfplan
 
   terraform_apply:
-    if: ${{ vars.SKIP_TERRAFORM_APPLY == false }}
     needs: terraform_plan
     name: Terraform Apply
     runs-on: ubuntu-latest
