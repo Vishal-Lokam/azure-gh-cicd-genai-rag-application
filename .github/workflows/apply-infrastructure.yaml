@@ -82,7 +82,7 @@ jobs:
           path: ./infrastructure/main.tfplan
 
   terraform_apply:
-    if: ${{ env.SKIP_TERRAFORM_APPLY == false }}
+    if: ${{ vars.SKIP_TERRAFORM_APPLY == false }}
     needs: terraform_plan
     name: Terraform Apply
     runs-on: ubuntu-latest
