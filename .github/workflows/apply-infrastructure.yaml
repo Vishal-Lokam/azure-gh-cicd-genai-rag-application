@@ -78,10 +78,10 @@ jobs:
           path: ./infrastructure/main.tfplan
 
   terraform_apply:
+    if: ${{ inputs.skip_terraform_apply != false }}
     needs: terraform_plan
     name: Terraform Apply
     runs-on: ubuntu-latest
-    if: ${{ inputs.skip_terraform_apply != false }}
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
       ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
