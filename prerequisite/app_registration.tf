@@ -21,6 +21,12 @@ resource "azurerm_role_assignment" "github_oidc_useraccess_role_assignment" {
   principal_id         = azuread_service_principal.github_oidc_sp.object_id
 }
 
+resource "azurerm_role_assignment" "github_oidc_kv_user_role_assignment" {
+  scope                = data.azurerm_subscription.primary.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azuread_service_principal.github_oidc_sp.object_id
+}
+
 resource "azuread_application_federated_identity_credential" "github_oidc_creds_main" {
   application_id = azuread_application.github_oidc.id
   display_name   = "${var.organisation_name}-${var.repository_name}-oidc-main"
