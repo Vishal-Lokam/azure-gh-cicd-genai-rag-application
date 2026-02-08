@@ -61,3 +61,9 @@ resource "azurerm_key_vault_access_policy" "kv_user_access_poicy" {
     "Set"
   ]
 }
+
+resource "azurerm_role_assignment" "kv_oidc_role_assignment" {
+  principal_id         = data.azurerm_client_config.current.object_id
+  scope                = azurerm_key_vault.astralbound_key_vault.id
+  role_definition_name = "Key Vault Secrets User"
+}
