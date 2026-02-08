@@ -10,6 +10,7 @@ on:
     inputs:
       skip_terraform_apply:
         type: boolean
+
 permissions:
   id-token: write
   contents: read
@@ -35,13 +36,15 @@ jobs:
       - name: Set environment variables
         run: |
           echo ${{ inputs.skip_terraform_apply }}
-          cd ../environment
-          export KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
-          echo "$KEYVAULT_NAME"
-          export LOCATION=$(jq '.location' platform.json | tr -d \")
-          echo "$LOCATION"
-          export RESOURCE_GROUP_NAME=$(jq '.resource_group_name' platform.json | tr -d \")
-          echo "$RESOURCE_GROUP_NAME"
+          echo "SKIP_TERRAFORM_APPLY=${{ inputs.skip_terraform_apply || false }}" >> $GITHUB_ENV
+          echo env.SKIP_TERRAFORM_APPLY
+          # cd ../environment
+          # export KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
+          # echo "$KEYVAULT_NAME"
+          # export LOCATION=$(jq '.location' platform.json | tr -d \")
+          # echo "$LOCATION"
+          # export RESOURCE_GROUP_NAME=$(jq '.resource_group_name' platform.json | tr -d \")
+          # echo "$RESOURCE_GROUP_NAME"
 
       - name: Azure Login
         uses: azure/login@v2
@@ -79,7 +82,7 @@ jobs:
           path: ./infrastructure/main.tfplan
 
   terraform_apply:
-    if: ${{ inputs.skip_terraform_apply != false }}
+    if: ${{ env.SKIP_TERRAFORM_APPLY == false }}
     needs: terraform_plan
     name: Terraform Apply
     runs-on: ubuntu-latest
