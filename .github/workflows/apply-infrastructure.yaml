@@ -7,6 +7,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      perform_terraform_apply:
+        required: true
+        type: boolean
 permissions:
   id-token: write
   contents: read
@@ -78,6 +82,7 @@ jobs:
     needs: terraform_plan
     name: Terraform Apply
     runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_terraform_apply }}
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
       ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
