@@ -1,14 +1,12 @@
-data "azurerm_key_vault" "astralbound_keyvault" {
-  name                = "kv-astralbound"
-  resource_group_name = "astralbound-prerequisites"
+resource "random_string" "postgres_password" {
+  length = 16
 }
 
-data "azurerm_key_vault_secret" "postgres_admin_password" {
-  name         = "postgres-administrator-password"
-  key_vault_id = data.azurerm_key_vault.astralbound_keyvault.id
+resource "azurerm_key_vault_secret" "kv_secret_postgres_password" {
+  name         = "postgres_password"
+  value        = random_string.postgres_password.result
+  key_vault_id = azurerm_key_vault.astralbound-key-vault.id
 }
-
-
 
 resource "azurerm_postgresql_flexible_server" "astralbound_postgres" {
   name                          = "astralbound-postgres"
@@ -17,7 +15,7 @@ resource "azurerm_postgresql_flexible_server" "astralbound_postgres" {
   version                       = "17"
   public_network_access_enabled = true
   administrator_login           = var.postgres_admin_login
-  administrator_password        = data.azurerm_key_vault_secret.postgres_admin_password.value
+  administrator_password        = random_string.postgres_password.result
   storage_mb                    = "32768"
   sku_name                      = "B_Standard_B1ms"
   zone                          = "1"

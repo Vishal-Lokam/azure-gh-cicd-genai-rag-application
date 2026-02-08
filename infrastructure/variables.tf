@@ -35,3 +35,8 @@ variable "postgres_admin_login" {
   description = "administrator login for Azure Postgres flexible server"
   type        = string
 }
+
+variable "key_vault_name" {
+  description = "Name of the key vault"
+  type        = string
+}
