@@ -32,12 +32,9 @@ resource "azurerm_key_vault" "astralbound-key-vault" {
   }
 }
 
-data "azuread_service_principal" "service_principal" {
-  display_name = "github_oidc"
-}
 
 resource "azurerm_role_assignment" "keyvault_role_assignment" {
   scope                = azurerm_key_vault.astralbound-key-vault.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azuread_service_principal.service_principal.object_id
+  principal_id         = data.azurerm_client_config.current.client_id
 }
