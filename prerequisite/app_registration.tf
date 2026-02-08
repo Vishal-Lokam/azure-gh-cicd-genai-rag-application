@@ -9,9 +9,15 @@ resource "azuread_service_principal" "github_oidc_sp" {
   client_id = azuread_application.github_oidc.client_id
 }
 
-resource "azurerm_role_assignment" "github_oidc_role_assignment" {
+resource "azurerm_role_assignment" "github_oidc_contributor_role_assignment" {
   scope                = data.azurerm_subscription.primary.id
   role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.github_oidc_sp.object_id
+}
+
+resource "azurerm_role_assignment" "github_oidc_useraccess_role_assignment" {
+  scope                = data.azurerm_subscription.primary.id
+  role_definition_name = "User Access Administrator"
   principal_id         = azuread_service_principal.github_oidc_sp.object_id
 }
 
