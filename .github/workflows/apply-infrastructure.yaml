@@ -34,6 +34,7 @@ jobs:
 
       - name: Set environment variables
         run: |
+          echo ${{ inputs.skip_terraform_apply }}
           cd ../environment
           export KEYVAULT_NAME=$(jq '.keyvault_name' platform.json | tr -d \")
           echo "$KEYVAULT_NAME"
