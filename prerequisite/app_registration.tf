@@ -23,7 +23,7 @@ resource "azurerm_role_assignment" "github_oidc_useraccess_role_assignment" {
 
 resource "azurerm_role_assignment" "github_oidc_kv_user_role_assignment" {
   scope                = data.azurerm_subscription.primary.id
-  role_definition_name = "Key Vault Data Access Administrator"
+  role_definition_name = "Key Vault Secrets Officer"
   principal_id         = azuread_service_principal.github_oidc_sp.object_id
 }
 

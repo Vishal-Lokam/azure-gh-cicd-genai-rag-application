@@ -42,3 +42,4 @@ terraform.rc
 
 Azure_Public_Service_Icons_V20/
 .venv/
+.env
