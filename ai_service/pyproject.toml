@@ -1,0 +1,11 @@
+[project]
+name = "project-astralbound"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "logfire>=4.22.0",
+    "pydantic-ai>=1.59.0",
+    "python-dotenv>=1.2.1",
+]

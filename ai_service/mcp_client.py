@@ -16,6 +16,7 @@ logfire.instrument_pydantic_ai()
 
 server = MCPServerStreamableHTTP("http://localhost:8080/mcp")
 
+# TODO: Pull credentials directly from the Azure key vault
 client = AsyncAzureOpenAI(
     azure_endpoint=os.getenv("ENDPOINT_URL"),
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
@@ -31,9 +32,7 @@ agent = Agent(model=model, toolsets=[server])
 
 
 async def main():
-    result = await agent.run(
-        "write email thanking for promotion to my boss. It should be written in simple language"
-    )
+    result = await agent.run("What is the latest Winter olympics 2026 news?")
     print(result.output)
 
 

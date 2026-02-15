@@ -1,5 +1,9 @@
 # azure-gh-cicd-genai-rag-application
 
-## Architecture Diagram Devops
+## [WIP]Architecture Diagram
 
-![DevOps Architecture Diagram](/Architecture%20diagram%20devops.png)
+![Architecture Diagram](/architecture_diagram.png)
+
+## [WIP]CICD Setup
+
+![CICD Setup](/cicd_diagram.png)
