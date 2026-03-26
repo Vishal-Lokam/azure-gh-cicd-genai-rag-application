@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi import status
-from api.routes.authentication import auth_router
-from repository.database import create_db_and_tables
+from src.api.routes.authentication import auth_router
+from src.api.routes.user import user_router
+from src.repository.database import create_db_and_tables
 from contextlib import asynccontextmanager
 
 
@@ -22,6 +23,7 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(user_router)
 
 
 @app.get("/health")
